@@ -1,13 +1,15 @@
 {% extends "base.html" %}
-
-{% load widget_tweaks %}
-
 {% block content %}
 
-  <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input name="myfile" type="file" />
-    <button type="submit" class="btn btn-success">Upload</button>
-  </form>
+<h2>Importar CSV</h2>
 
-{% endblock content %}
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="form-group">
+      <label for="id_myfile">Selecione o arquivo CSV:</label>
+      <input type="file" id="id_myfile" name="myfile" class="form-control-file">
+  </div>
+  <button type="submit" class="btn btn-success">Upload</button>
+</form>
+
+{% endblock %}
