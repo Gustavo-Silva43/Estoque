@@ -1,35 +1,34 @@
 {% extends "base.html" %}
 {% load static %}
-{% load widget_tweaks%}
+{% load widget_tweaks %} 
 
 {% block content %}
 
- <form method="POST" novalidate>
+  <form method="POST" novalidate>
     {% csrf_token %}
     {% for field in form.visible_fields %}
-        <div class="form-group" {% if field.erros %} has-error {% endif %}>
-            <labeel for ="{{ field.id_for_label}}">
+        <div class="form-group {% if field.errors %} has-error {% endif %}"> 
+            <label for ="{{ field.id_for_label}}"> 
                 {% if field.field.required %}
-                <span class="required">{{field.label}}</span>
+                <span class="required">{{ field.label }}</span>
                 {% else %}
-                <span class="optional">{{field.label}}</span>
-                {% else %}
-                    {{ field.label }}
+                <span class="optional">{{ field.label }}</span>
+                
                 {% endif %}
-            </labeel>
+            </label>
             {% render_field field class="form-control" %}
-            {% for error in field.erros %}
-                <span class="text-muted">{{ error }}</span>
+            {% for error in field.errors %} 
+                <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </div>
     {% endfor %}
     <button type="submit" class="btn btn-success">Cadastrar</button>
     </form>
     
-    {% endlock content %}
+{% endblock content %} 
     
-    {% block js%}
+{% block js%}
 
         <script src="{% static 'js/produto.js' %}"></script>
 
-    {% endblock js %}
+{% endblock js %}
