@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="{% url 'index' %}">Estoque</a>
+    \<a class="navbar-brand" href="{% url 'core:index' %}">Estoque</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -37,7 +37,7 @@
     {% if user.is_authenticated %}
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-          <a href="{% url 'logout' %}" class="nav-link">Sair</a>
+          <a href="{% url 'accounts:logout' %}" class="nav-link">Sair</a>
         </li>
       </ul>
     {% endif %}
