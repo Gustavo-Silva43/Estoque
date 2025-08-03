@@ -8,19 +8,16 @@
       {% endif %}
 
       {% for pg in page_obj.paginator.page_range %}
-        {% with query_string_q='&q='|add:request.GET.q if request.GET.q else '' %}
-
           {% if pg == page_obj.number %}
-            <li class="page-item active"><a class="page-link" href="?page={{ pg }}{{ query_string_q }}">{{ pg }}</a></li>
+            <li class="page-item active"><a class="page-link" href="?page={{ pg }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ pg }}</a></li>
           {% elif pg <= 3 or pg >= page_obj.paginator.num_pages|add:'-2' %}
-            <li class="page-item"><a class="page-link" href="?page={{ pg }}{{ query_string_q }}">{{ pg }}</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ pg }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ pg }}</a></li>
           {% elif pg == page_obj.number|add:'-4' or pg == page_obj.number|add:'+4' %}
             <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
           {% elif pg > page_obj.number|add:'-4' and pg < page_obj.number|add:'+4' %}
-            <li class="page-item"><a class="page-link" href="?page={{ pg }}{{ query_string_q }}">{{ pg }}</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ pg }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ pg }}</a></li>
           {% endif %}
 
-        {% endwith %}
       {% endfor %}
 
       {% if page_obj.has_next %}
