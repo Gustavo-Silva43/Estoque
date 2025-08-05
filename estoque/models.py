@@ -19,6 +19,11 @@ class Estoque(TimeStampedModel):
 
     class Meta:
         ordering = ('-created_at',)
+        permissions = [
+            ("pode_adicionar-estoque", "Pode adicionar novos itens ao estoque"),
+            ("pode_excluir_estoque", "Pode excluir itens do estoque"),
+            ("pode_ver_relatorios", "Pode ver relatórios de estoque"),
+        ] 
 
     def __str__(self):
         if self.nf:
