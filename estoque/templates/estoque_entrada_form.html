@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load widget_tweaks %}
-{% load bootstrap %}
+{% load bootstrap4 %}
 
 {% block css %}
 
@@ -50,7 +50,8 @@
             <div id="estoque" class="form-inline">
               {% for item_estoque_form in formset %}
                 <div id="item-{{ forloop.counter0 }}" class="form-group">
-                  {{ item_estoque_form|bootstrap }}
+                  {% bootstrap_field item_estoque_form.produto %}
+                  {% bootstrap_field item_estoque_form.quantidade %}
                 </div>
               {% endfor %}
             </div>
@@ -88,7 +89,7 @@
 
   <script type="text/html" id="item-estoque">
     <div id="item-__prefix__" class="form-group">
-    {{ formset.empty_form|bootstrap }}
+      {% bootstrap_form formset.empty_form %}
     </div>
   </script>
 
