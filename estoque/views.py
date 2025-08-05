@@ -67,7 +67,6 @@ def estoque_add(request, form_inline, template_name,movimento, url):
         extra=0,
         can_delete=True,
         min_num=1,
-        validadeate_min=True,
     )    
     if request.method == 'POST':
         form = EstoqueForm(request.POST, instance=estoque_form, prefix='main')
@@ -87,8 +86,9 @@ def estoque_add(request, form_inline, template_name,movimento, url):
     else:
         form = EstoqueForm(instance=estoque_form, prefix='main')
         formset = item_estoque_formset(instance=estoque_form, prefix='estoque')
+   
     context = {'form': form, 'formset': formset,}
-    return
+    return context
 
 @login_required
 def estoque_entrada_add(request):
@@ -97,9 +97,9 @@ def estoque_entrada_add(request):
     movimento = 'e'
     url = 'estoque:estoque_detail'
     response = estoque_add(request, form_inline, template_name, movimento, url)
-    if context.get('pk'):
-         return HttpResponseRedirect(resolve_url(url, context.get('pk')))
-    return render(request, template_name, context)
+    if 'pk' in response:
+        return redirect(resolve_url(url, pk=response.get('pk')))
+    return render(request, template_name, response)
 
 def estoque_saida_list(request):
     template_name = 'estoque_list.html'
@@ -151,7 +151,7 @@ def protocolo_de_entrega(request):
 
 @login_required
 def protocolo_de_entrega_detail(request, pk):
-    template_name = 'protocolo_de_entrega_detail.html'
+    template_name = 'protocolo_de_entrega_detail.html' 
     obj = ProtocoloEntrega.objects.get(pk=pk)
     context = {
         'object': obj,
