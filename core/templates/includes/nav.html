@@ -34,12 +34,15 @@
         </div>
       </li>
     </ul>
-    {% if user.is_authenticated %}
-      <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-          <a href="{% url 'accounts:logout' %}" class="nav-link">Sair</a>
-        </li>
-      </ul>
-    {% endif %}
+{% if user.is_authenticated %}
+<ul class="navbar-nav px-3">
+  <li class="nav-item text-nowrap">
+    <form action="{% url 'accounts:logout' %}" method="post" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" class="nav-link btn btn-link text-white">Sair</button>
+    </form>
+  </li>
+</ul>
+{% endif %}
   </div>
 </nav>
