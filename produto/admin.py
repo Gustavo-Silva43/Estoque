@@ -1,5 +1,11 @@
 
+import csv
+from os import write
 from django.contrib import admin
+from django.http import HttpResponse
+import xlwt
+
+from produto.actions.export_xlsx import MDATA
 from .models import Produto, Categoria 
 
 @admin.register(Produto)
@@ -29,11 +35,11 @@ class ProdutoAdmin(admin.ModelAdmin):
         field_names = [field.name for field in meta.field]
 
         response = HttpResponse(context_type='text/csv')
-        respnse[
+        response[
             'Content-Disposition'] = 'attachment; filename={}.csv'.format(meta)
         writer = csv.writer(response)
 
-        writer = writerow(field_names)
+        writer = writer(field_names)
         for obj in queryset:
             row = write.writerow([getattr(obj,field)
                                         for field in field_names])
@@ -56,7 +62,7 @@ class ProdutoAdmin(admin.ModelAdmin):
 
         response = HttpResponse(content_type='application/ms-excel')
         response[
-            'Content-Disposition'] = 'attachment; filename="%s_%s.xlsx"' % (meta,MDTA)
+            'Content-Disposition'] = 'attachment; filename="%s_%s.xlsx"' % (meta,MDATA)
 
         wb = xlwt.Workbook(encoding='utf-8')
         ws = wb.add_sheet(self.model.__name__)
@@ -82,7 +88,7 @@ class ProdutoAdmin(admin.ModelAdmin):
         )
         for row, rowdata in enumerate(rows):
             row_num += 1
-            for col, val in enumerante(rowdata):
+            for col, val in enumerate(rowdata):
                 ws.write(row_num, col, val, default_style)
 
         wb.save(response)
