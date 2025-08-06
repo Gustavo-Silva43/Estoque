@@ -1,5 +1,7 @@
 from django.urls import path
 
+from core import views
+
 from . import views as v
 
 app_name = 'produto'
@@ -21,4 +23,6 @@ urlpatterns = [
         v.import_csv_with_pandas,
         name='import_csv_with_pandas'
     ),
+    path('adicionar/', v.produto_add, name='produto_add'),
+
 ]
