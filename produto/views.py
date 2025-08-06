@@ -1,23 +1,25 @@
-from django.shortcuts import render
-import csv 
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
+from django.shortcuts import render, redirect, get_object_or_404
+import csv
 import io
-from datetime import datetime 
-import pandas as pd 
+from datetime import datetime
+import pandas as pd
 from django.contrib import messages
 from django.db.models import Q
-from django.http import HttpResponseRedirect,JsonResponse
-from django.shortcuts import render 
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
-from django.views.generic import CreateView,ListView, UpdateView
+from django.views.generic import CreateView, ListView, UpdateView
 import os
 from django.conf import settings
-
-from .actions.export_xlsx import export_xlsx
-from .actions.import_xlsx import \
-    import_xlsx as action_import_xlsx
-
 from .forms import ProdutoForm
-from .models import Produto, Categoria 
+from django.contrib.auth.decorators import permission_required
+from .actions.export_xlsx import export_xlsx
+from .actions.import_xlsx import import_xlsx as action_import_xlsx
+from .models import Produto
+
+
 
 def produto_list(request):
     template_name = 'produto_list.html'
@@ -188,12 +190,12 @@ def import_csv_with_pandas(request):
     
     for index, row in df.iterrows(): 
         try:
-            produto_nome = row[0]
-            ncm_val = row[1]
-            importado_val = row[2]
-            preco_val = row[3]
-            estoque_val = row[4]
-            estoque_minimo_val = row[5]
+            produto_nome = row.iloc[0]
+            ncm_val = row.iloc[1]
+            importado_val = row.iloc[2]
+            preco_val = row.iloc[3]
+            estoque_val = row.iloc[4]
+            estoque_minimo_val = row.iloc[5]
             obj, created = Produto.objects.update_or_create(
                 produto=produto_nome, 
                 defaults={
@@ -205,13 +207,19 @@ def import_csv_with_pandas(request):
                 }
             )
             
-            if created:
-                messages.info(request, f"Produto '{produto_nome}' criado com sucesso.")
-            else:
-                messages.info(request, f"Produto '{produto_nome}' atualizado com sucesso.")
-            
         except Exception as e:
             messages.error(request, f"Erro ao processar produto '{produto_nome}' na linha {index}: {e}")
 
     messages.success(request, 'Processo de importação/atualização de produtos concluído.')
     return HttpResponseRedirect(reverse('produto:produto_list'))
+
+@permission_required('produto.add_produto')
+def produto_add(request):
+    template_name = 'produto_form.html'
+    form = ProdutoForm(request.POST or None)
+
+    if form.is_valid():
+        form.save()
+        return redirect('produto:produto_list')
+    context = {'form': form}
+    return render(request, template_name, context)
