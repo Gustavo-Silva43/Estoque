@@ -5,10 +5,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
 from django.contrib import messages
-
-# Certifique-se de importar o seu modelo 'Produto'
 from produto.models import Produto
-
 from .forms import EstoqueForm, EstoqueItensEntradaForm, EstoqueItensSaidaForm
 from .models import (
     Estoque,
@@ -19,7 +16,6 @@ from .models import (
 )
 
 
-# View de listagem para entrada
 def estoque_entrada_list(request):
     template_name = 'estoque_list.html'
     objects = EstoqueEntrada.objects.all()
@@ -30,8 +26,6 @@ def estoque_entrada_list(request):
     }
     return render(request, template_name, context)
 
-
-# View de listagem para entrada (baseada em classe)
 class EstoqueEntradaList(ListView):
     model = EstoqueEntrada
     template_name = 'estoque_list.html'
@@ -42,8 +36,6 @@ class EstoqueEntradaList(ListView):
         context['url_add'] = 'estoque:estoque_entrada_add'
         return context
 
-
-# View de detalhes para entrada
 def estoque_entrada_detail(request, pk):
     template_name = 'estoque_detail.html'
     obj = EstoqueEntrada.objects.get(pk=pk)
@@ -54,13 +46,11 @@ def estoque_entrada_detail(request, pk):
     return render(request, template_name, context)
 
 
-# View de detalhes (baseada em classe)
 class EstoqueDetail(DetailView):
     model = Estoque
     template_name = 'estoque_detail.html'
 
 
-# Função para dar baixa no estoque
 def dar_baixa_estoque(form):
     produtos = form.estoqueitens_set.all()
     for item in produtos:
@@ -69,8 +59,6 @@ def dar_baixa_estoque(form):
         produto.save()
     print('Estoque atualizado com sucesso!')
 
-
-# Função genérica para adicionar estoque (entrada/saída)
 def estoque_add(request, form_inline, template_name, movimento, url):
     estoque_form = Estoque()
     item_estoque_formset = inlineformset_factory(
@@ -103,8 +91,6 @@ def estoque_add(request, form_inline, template_name, movimento, url):
     context = {'form': form, 'formset': formset, }
     return context
 
-
-# View para adicionar entrada de estoque
 @login_required
 @permission_required('estoque.pode_adicionar_estoque', raise_exception=True)
 def estoque_entrada_add(request):
@@ -117,8 +103,6 @@ def estoque_entrada_add(request):
         return redirect(resolve_url(url, pk=response.get('pk')))
     return render(request, template_name, response)
 
-
-# View de listagem para saída
 def estoque_saida_list(request):
     template_name = 'estoque_list.html'
     objects = EstoqueSaida.objects.all()
@@ -129,8 +113,6 @@ def estoque_saida_list(request):
     }
     return render(request, template_name, context)
 
-
-# View de listagem para saída (baseada em classe)
 class EstoqueSaidaList(ListView):
     model = EstoqueSaida
     template_name = 'estoque_list.html'
@@ -141,8 +123,6 @@ class EstoqueSaidaList(ListView):
         context['url_add'] = 'estoque:estoque_saida_add'
         return context
 
-
-# View de detalhes para saída
 def estoque_saida_detail(request, pk):
     template_name = 'estoque_detail.html'
     obj = EstoqueSaida.objects.get(pk=pk)
@@ -152,8 +132,6 @@ def estoque_saida_detail(request, pk):
     }
     return render(request, template_name, context)
 
-
-# View para adicionar saída de estoque
 @login_required
 @permission_required('estoque.pode_adicionar_estoque', raise_exception=True)
 def estoque_saida_add(request):
@@ -166,8 +144,6 @@ def estoque_saida_add(request):
         return HttpResponseRedirect(resolve_url(url, context.get('pk')))
     return render(request, template_name, context)
 
-
-# View para listagem de protocolos de entrega
 def protocolo_de_entrega(request):
     template_name = 'protocolo_de_entrega_list.html'
     objects = ProtocoloEntrega.objects.all()
@@ -176,8 +152,6 @@ def protocolo_de_entrega(request):
     }
     return render(request, template_name, context)
 
-
-# View de detalhes para protocolos de entrega
 @login_required
 def protocolo_de_entrega_detail(request, pk):
     template_name = 'protocolo_de_entrega_detail.html'
@@ -187,8 +161,6 @@ def protocolo_de_entrega_detail(request, pk):
     }
     return render(request, template_name, context)
 
-
-# View para dar baixa no estoque com protocolo de entrega
 @login_required
 @permission_required('estoque.pode_excluir_estoque', raise_exception=True)
 def dar_baixa_no_estoque_com_protocolo_de_entrega(request, pk):
