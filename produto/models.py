@@ -10,7 +10,6 @@ class Produto(models.Model):
     estoque = models.IntegerField('estoque atual', default=0) 
     estoque_minimo = models.IntegerField('estoque mínimo', default=0)
     
-    # ADICIONE ESTA LINHA:
     categoria = models.ForeignKey(
         'Categoria',  
         on_delete=models.SET_NULL, 
