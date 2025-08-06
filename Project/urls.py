@@ -18,8 +18,10 @@ from django.contrib import admin
 from django.urls import path, include, reverse_lazy
 from django.contrib.auth import urls as auth_urls 
 from django.contrib.auth.views import PasswordResetView 
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
+    path('', RedirectView.as_view(url=reverse_lazy('accounts:login'), permanent=False)),
     path('admin/', admin.site.urls),
     path('', include((auth_urls.urlpatterns, 'accounts'), namespace='accounts')),
     path('password_reset/', PasswordResetView.as_view(success_url=reverse_lazy('accounts:password_reset_done')), name='password_reset'),
