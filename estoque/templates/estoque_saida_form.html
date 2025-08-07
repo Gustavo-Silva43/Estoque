@@ -1,20 +1,17 @@
 {% extends "base.html" %}
 {% load static %}
 {% load widget_tweaks %}
-{% load bootstrap %}
+{% load bootstrap4 %}
 
 {% block css %}
-
   <style>
     .form-control {
       margin: 10px;
     }
   </style>
-
 {% endblock css %}
 
 {% block content %}
-
   <a href="{% url 'estoque:estoque_saida_list' %}">Voltar</a>
 
   <div class="row">
@@ -50,7 +47,7 @@
             <div id="estoque" class="form-inline">
               {% for item_estoque_form in formset %}
                 <div id="item-{{ forloop.counter0 }}" class="form-group">
-                  {{ item_estoque_form|bootstrap }}
+                  {% bootstrap_form item_estoque_form %}
                 </div>
               {% endfor %}
             </div>
@@ -75,7 +72,6 @@
             </div>
           </div>
         </div>
-
       </form>
     </div>
   </div>
@@ -83,14 +79,11 @@
 {% endblock content %}
 
 {% block js %}
-
   <script src="{% static 'js/estoque_saida.js' %}"></script>
-
+  {% load bootstrap4 %}
   <script type="text/html" id="item-estoque">
     <div id="item-__prefix__" class="form-group">
-    {{ formset.empty_form|bootstrap }}
+      {% bootstrap_form formset.empty_form %}
     </div>
   </script>
-
-
 {% endblock js %}
